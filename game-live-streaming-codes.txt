@@ -1,0 +1,2503 @@
+# Game live streaming project
+## Include both python and R codes
+
+## python prerequisite
+from selenium import webdriver
+from selenium.webdriver.ie.options import ElementScrollBehavior
+from selenium.webdriver.support import expected_conditions as EC
+import selenium.webdriver.support.ui as ui
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
+import pandas as pd
+from selenium.webdriver.support.ui import Select
+import numpy as np
+import os
+import matplotlib.pyplot as plt
+from sklearn.model_selection import KFold
+
+service=Service(r'C:\Users\...\Documents\geckodriver.exe')
+driver = webdriver.Firefox(service=service)
+
+
+# Scrape + transform numerical data of each of top 20 channels 
+## Python
+@author: Noreen and Yi Heng
+#1.Channel CRITICALROLE
+url = 'https://twitchtracker.com/criticalrole/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name1= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name1.text)
+list_channel_name1 = channel_name1.text.split(".")
+
+# Scrape name of games by loop
+game_name1= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name1.text)
+list_game_name1=game_name1.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/criticalrole/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers1= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers1.text)
+list_total_followers1 = total_followers1.text.split(".")
+
+#scrape average viewers
+avg_viewers1= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers1.text)
+list_avg_viewers1 = avg_viewers1.text.split(".")
+
+#scrap total views
+total_views1= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views1.text)
+list_total_views1 = total_views1.text.split()
+
+#scrap hours streamed
+hours_streamed1= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed1.text)
+list_hours_streamed1 = hours_streamed1.text.split()
+
+#scrap hours watched
+hours_watched1= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched1.text)
+list_hours_watched1 = hours_watched1.text.split()
+
+#Modify the original data
+list_total_followers1[0]=893000
+list_avg_viewers1[0]=20401
+list_total_views1[0]=26900000
+list_hours_streamed1[0]=1438
+list_hours_watched1[0]=29300000
+
+#Unify the list
+list1=list_channel_name1+list_game_name1+list_total_followers1+list_avg_viewers1+list_total_views1+list_hours_streamed1+list_hours_watched1
+
+
+#2.Channel XQCOW
+url = 'https://twitchtracker.com/xqcow/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name2= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name2.text)
+list_channel_name2 = channel_name2.text.split(".")
+
+# Scrape name of games by loop
+game_name2= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name2.text)
+list_game_name2=game_name2.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/xqcow/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers2= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers2.text)
+list_total_followers2 = total_followers2.text.split()
+
+#scrape average viewers
+avg_viewers2= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers2.text)
+list_avg_viewers2 = avg_viewers2.text.split(".")
+
+#scrap total views
+total_views2= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views2.text)
+list_total_views2 = total_views2.text.split()
+
+#scrap hours streamed
+hours_streamed2= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed2.text)
+list_hours_streamed2 = hours_streamed2.text.split()
+
+#scrap hours watched
+hours_watched2= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched2.text)
+list_hours_watched2 = hours_watched2.text.split()
+
+#Modify the original data
+list_total_followers2[0]=9360000
+list_avg_viewers2[0]=30161
+list_total_views2[0]=430000000
+list_hours_streamed2[0]=15645
+list_hours_watched2[0]=472000000
+
+#Unify the list
+list2=list_channel_name2+list_game_name2+list_total_followers2+list_avg_viewers2+list_total_views2+list_hours_streamed2+list_hours_watched2
+
+
+#3.Channel RANBOOLIVE
+url = 'https://twitchtracker.com/ranboolive/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name3= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name3.text)
+list_channel_name3 = channel_name3.text.split(".")
+
+# Scrape name of games by loop
+game_name3= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name3.text)
+list_game_name3=game_name3.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/ranboolive/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers3= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers3.text)
+list_total_followers3 = total_followers3.text.split()
+
+#scrape average viewers
+avg_viewers3= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers3.text)
+list_avg_viewers3 = avg_viewers3.text.split(".")
+
+#scrap total views
+total_views3= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views3.text)
+list_total_views3 = total_views3.text.split()
+
+#scrap hours streamed
+hours_streamed3= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed3.text)
+list_hours_streamed3 = hours_streamed3.text.split()
+
+#scrap hours watched
+hours_watched3= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched3.text)
+list_hours_watched3 = hours_watched3.text.split()
+
+#Modify the original data
+list_total_followers3[0]=3880000
+list_avg_viewers3[0]=62975
+list_total_views3[0]=58500000
+list_hours_streamed3[0]=1039
+list_hours_watched3[0]=65500000
+
+#Unify the list
+list3=list_channel_name3+list_game_name3+list_total_followers3+list_avg_viewers3+list_total_views3+list_hours_streamed3+list_hours_watched3
+
+
+#4.Channel GAULES
+url = 'https://twitchtracker.com/gaules/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name4= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name4.text)
+list_channel_name4 = channel_name4.text.split(".")
+
+# Scrape name of games by loop
+game_name4= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name4.text)
+list_game_name4=game_name4.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/gaules/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers4= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers4.text)
+list_total_followers4 = total_followers4.text.split()
+
+#scrape average viewers
+avg_viewers4= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers4.text)
+list_avg_viewers4 = avg_viewers4.text.split(".")
+
+#scrap total views
+total_views4= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views4.text)
+list_total_views4 = total_views4.text.split()
+
+#scrap hours streamed
+hours_streamed4= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed4.text)
+list_hours_streamed4 = hours_streamed4.text.split()
+
+#scrap hours watched
+hours_watched4= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched4.text)
+list_hours_watched4 = hours_watched4.text.split()
+
+#Modify the original data
+list_total_followers4[0]=2980000
+list_avg_viewers4[0]=10865
+list_total_views4[0]=346000000
+list_hours_streamed4[0]=30069
+list_hours_watched4[0]=327000000
+
+#Unify the list
+list4=list_channel_name4+list_game_name4+list_total_followers4+list_avg_viewers4+list_total_views4+list_hours_streamed4+list_hours_watched4
+
+
+#5.Channel IBAI
+url = 'https://twitchtracker.com/ibai/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name5= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name5.text)
+list_channel_name5 = channel_name5.text.split(".")
+
+# Scrape name of games by loop
+game_name5= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name5.text)
+list_game_name5=game_name5.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/ibai/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers5= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers5.text)
+list_total_followers5 = total_followers5.text.split()
+
+#scrape average viewers
+avg_viewers5= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers5.text)
+list_avg_viewers5 = avg_viewers5.text.split(".")
+
+#scrap total views
+total_views5= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views5.text)
+list_total_views5 = total_views5.text.split()
+
+#scrap hours streamed
+hours_streamed5= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed5.text)
+list_hours_streamed5 = hours_streamed5.text.split()
+
+#scrap hours watched
+hours_watched5= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched5.text)
+list_hours_watched5 = hours_watched5.text.split()
+
+#Modify the original data
+list_total_followers5[0]=8200000
+list_avg_viewers5[0]=47090
+list_total_views5[0]=269000000
+list_hours_streamed5[0]=3323
+list_hours_watched5[0]=156000000
+
+#Unify the list
+list5=list_channel_name5+list_game_name5+list_total_followers5+list_avg_viewers5+list_total_views5+list_hours_streamed5+list_hours_watched5
+
+
+#6.Channel NICKMERCS
+url = 'https://twitchtracker.com/nickmercs/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name6= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name6.text)
+list_channel_name6 = channel_name6.text.split(".")
+
+# Scrape name of games by loop
+game_name6= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name6.text)
+list_game_name6=game_name6.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/nickmercs/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers6= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers6.text)
+list_total_followers6 = total_followers6.text.split()
+
+#scrape average viewers
+avg_viewers6= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers6.text)
+list_avg_viewers6 = avg_viewers6.text.split(".")
+
+#scrap total views
+total_views6= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views6.text)
+list_total_views6 = total_views6.text.split()
+
+#scrap hours streamed
+hours_streamed6= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed6.text)
+list_hours_streamed6 = hours_streamed6.text.split()
+
+#scrap hours watched
+hours_watched6= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched6.text)
+list_hours_watched6 = hours_watched6.text.split()
+
+#Modify the original data
+list_total_followers6[0]=6190000
+list_avg_viewers6[0]=22352
+list_total_views6[0]=201000000
+list_hours_streamed6[0]=10429
+list_hours_watched6[0]=233000000
+
+#Unify the list
+list6=list_channel_name6+list_game_name6+list_total_followers6+list_avg_viewers6+list_total_views6+list_hours_streamed6+list_hours_watched6
+
+
+#7.Channel 加藤純一です
+url = 'https://twitchtracker.com/kato_junichi0817/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name7= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name7.text)
+list_channel_name7 = channel_name7.text.split(".")
+
+# Scrape name of games by loop
+game_name7= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name7.text)
+list_game_name7=game_name7.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/kato_junichi0817/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers7= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers7.text)
+list_total_followers7 = total_followers7.text.split()
+
+#scrape average viewers
+avg_viewers7= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers7.text)
+list_avg_viewers7 = avg_viewers7.text.split(".")
+
+#scrap total views
+total_views7= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views7.text)
+list_total_views7 = total_views7.text.split()
+
+#scrap hours streamed
+hours_streamed7= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed7.text)
+list_hours_streamed7 = hours_streamed7.text.split()
+
+#scrap hours watched
+hours_watched7= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched7.text)
+list_hours_watched7 = hours_watched7.text.split()
+
+#Modify the original data
+list_total_followers7[0]=457000
+list_avg_viewers7[0]=22634
+list_total_views7[0]=2640000
+list_hours_streamed7[0]=1665
+list_hours_watched7[0]=37700000
+
+#Unify the list
+list7=list_channel_name7+list_game_name7+list_total_followers7+list_avg_viewers7+list_total_views7+list_hours_streamed7+list_hours_watched7
+
+
+#8.Channel HASANABI
+url = 'https://twitchtracker.com/hasanabi/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name8= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name8.text)
+list_channel_name8 = channel_name8.text.split(".")
+
+# Scrape name of games by loop
+game_name8= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name8.text)
+list_game_name8=game_name8.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/hasanabi/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers8= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers8.text)
+list_total_followers8 = total_followers8.text.split()
+
+#scrape average viewers
+avg_viewers8= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers8.text)
+list_avg_viewers8 = avg_viewers8.text.split(".")
+
+#scrap total views
+total_views8= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views8.text)
+list_total_views8 = total_views8.text.split()
+
+#scrap hours streamed
+hours_streamed8= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed8.text)
+list_hours_streamed8 = hours_streamed8.text.split()
+
+#scrap hours watched
+hours_watched8= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched8.text)
+list_hours_watched8 = hours_watched8.text.split()
+
+#Modify the original data
+list_total_followers8[0]=1570000
+list_avg_viewers8[0]=13742
+list_total_views8[0]=88400000
+list_hours_streamed8[0]=9355
+list_hours_watched8[0]=129000000
+
+#Unify the list
+list8=list_channel_name8+list_game_name8+list_total_followers8+list_avg_viewers8+list_total_views8+list_hours_streamed8+list_hours_watched8
+
+
+#9.Channel AURONPLAY
+url = 'https://twitchtracker.com/auronplay/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name9= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name9.text)
+list_channel_name9 = channel_name9.text.split(".")
+
+# Scrape name of games by loop
+game_name9= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name9.text)
+list_game_name9=game_name9.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/auronplay/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers9= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers9.text)
+list_total_followers9 = total_followers9.text.split()
+
+#scrape average viewers
+avg_viewers9= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers9.text)
+list_avg_viewers9 = avg_viewers9.text.split(".")
+
+#scrap total views
+total_views9= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views9.text)
+list_total_views9 = total_views9.text.split()
+
+#scrap hours streamed
+hours_streamed9= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed9.text)
+list_hours_streamed9 = hours_streamed9.text.split()
+
+#scrap hours watched
+hours_watched9= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched9.text)
+list_hours_watched9 = hours_watched9.text.split()
+
+#Modify the original data
+list_total_followers9[0]=10500000
+list_avg_viewers9[0]=89701
+list_total_views9[0]=197000000
+list_hours_streamed9[0]=1930
+list_hours_watched9[0]=173000000
+
+#Unify the list
+list9=list_channel_name9+list_game_name9+list_total_followers9+list_avg_viewers9+list_total_views9+list_hours_streamed9+list_hours_watched9
+
+#10.Channel MONTANABLACK88
+url = 'https://twitchtracker.com/montanablack88/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name10= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name10.text)
+list_channel_name10 = channel_name10.text.split(".")
+
+# Scrape name of games by loop
+game_name10= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name10.text)
+list_game_name10=game_name10.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/montanablack88/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers10= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers10.text)
+list_total_followers10 = total_followers10.text.split()
+
+#scrape average viewers
+avg_viewers10= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers10.text)
+list_avg_viewers10 = avg_viewers10.text.split(".")
+
+#scrap total views
+total_views10= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views10.text)
+list_total_views10 = total_views10.text.split()
+
+#scrap hours streamed
+hours_streamed10= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed10.text)
+list_hours_streamed10 = hours_streamed10.text.split()
+
+#scrap hours watched
+hours_watched10= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched10.text)
+list_hours_watched10 = hours_watched10.text.split()
+
+#Modify the original data
+list_total_followers10[0]=4180000
+list_avg_viewers10[0]=27705
+list_total_views10[0]=133000000
+list_hours_streamed10[0]=4617
+list_hours_watched10[0]=1280000
+
+#Unify the list
+list10=list_channel_name10+list_game_name10+list_total_followers10+list_avg_viewers10+list_total_views10+list_hours_streamed10+list_hours_watched10
+
+#11.Channel CASTRO_1021
+url = 'https://twitchtracker.com/castro_1021/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name11= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name11.text)
+list_channel_name11 = channel_name11.text.split(".")
+
+# Scrape name of games by loop
+game_name11= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name11.text)
+list_game_name11=game_name11.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/castro_1021/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers11= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers11.text)
+list_total_followers11 = total_followers11.text.split()
+
+#scrape average viewers
+avg_viewers11= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers11.text)
+list_avg_viewers11 = avg_viewers11.text.split(".")
+
+#scrap total views
+total_views11= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views11.text)
+list_total_views11 = total_views11.text.split()
+
+#scrap hours streamed
+hours_streamed11= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed11.text)
+list_hours_streamed11 = hours_streamed11.text.split()
+
+#scrap hours watched
+hours_watched11= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched11.text)
+list_hours_watched11 = hours_watched11.text.split()
+
+#Modify the original data
+list_total_followers11[0]=3190000
+list_avg_viewers11[0]=16093
+list_total_views11[0]=123000000
+list_hours_streamed11[0]=7493
+list_hours_watched11[0]=121000000
+
+#Unify the list
+list11=list_channel_name11+list_game_name11+list_total_followers11+list_avg_viewers11+list_total_views11+list_hours_streamed11+list_hours_watched11
+
+#12.Channel CASIMITO
+url = 'https://twitchtracker.com/casimito/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name12= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name12.text)
+list_channel_name12 = channel_name12.text.split(".")
+
+# Scrape name of games by loop
+game_name12= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name12.text)
+list_game_name12=game_name12.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/casimito/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers12= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers12.text)
+list_total_followers12 = total_followers12.text.split()
+
+#scrape average viewers
+avg_viewers12= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers12.text)
+list_avg_viewers12 = avg_viewers12.text.split(".")
+
+#scrap total views
+total_views12= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views12.text)
+list_total_views12 = total_views12.text.split()
+
+#scrap hours streamed
+hours_streamed12= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed12.text)
+list_hours_streamed12 = hours_streamed12.text.split()
+
+#scrap hours watched
+hours_watched12= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched12.text)
+list_hours_watched12 = hours_watched12.text.split()
+
+#Modify the original data
+list_total_followers12[0]=899000
+list_avg_viewers12[0]=8478
+list_total_views12[0]=18100000
+list_hours_streamed12[0]=3093
+list_hours_watched12[0]=26200000
+
+#Unify the list
+list12=list_channel_name12+list_game_name12+list_total_followers12+list_avg_viewers12+list_total_views12+list_hours_streamed12+list_hours_watched12
+
+
+#13.Channel SYKKUNO
+url = 'https://twitchtracker.com/sykkuno/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name13= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name13.text)
+list_channel_name13 = channel_name13.text.split(".")
+
+# Scrape name of games by loop
+game_name13= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name13.text)
+list_game_name13=game_name13.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/sykkuno/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers13= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers13.text)
+list_total_followers13 = total_followers13.text.split()
+
+#scrape average viewers
+avg_viewers13= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers13.text)
+list_avg_viewers13 = avg_viewers13.text.split(".")
+
+#scrap total views
+total_views13= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views13.text)
+list_total_views13 = total_views13.text.split()
+
+#scrap hours streamed
+hours_streamed13= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed13.text)
+list_hours_streamed13 = hours_streamed13.text.split()
+
+#scrap hours watched
+hours_watched13= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched13.text)
+list_hours_watched13 = hours_watched13.text.split()
+
+#Modify the original data
+list_total_followers13[0]=3790000
+list_avg_viewers13[0]=19324
+list_total_views13[0]=84000000
+list_hours_streamed13[0]=3982
+list_hours_watched13[0]=76900000
+
+#Unify the list
+list13=list_channel_name13+list_game_name13+list_total_followers13+list_avg_viewers13+list_total_views13+list_hours_streamed13+list_hours_watched13
+
+
+#14.Channel SUMMIT1G
+url = 'https://twitchtracker.com/summit1g/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name14= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name14.text)
+list_channel_name14 = channel_name14.text.split(".")
+
+# Scrape name of games by loop
+game_name14= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name14.text)
+list_game_name14=game_name14.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/summit1g/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers14= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers14.text)
+list_total_followers14 = total_followers14.text.split()
+
+#scrape average viewers
+avg_viewers14= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers14.text)
+list_avg_viewers14 = avg_viewers14.text.split(".")
+
+#scrap total views
+total_views14= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views14.text)
+list_total_views14 = total_views14.text.split()
+
+#scrap hours streamed
+hours_streamed14= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed14.text)
+list_hours_streamed14 = hours_streamed14.text.split()
+
+#scrap hours watched
+hours_watched14= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched14.text)
+list_hours_watched14 = hours_watched14.text.split()
+
+#Modify the original data
+list_total_followers14[0]=6000000
+list_avg_viewers14[0]=23684
+list_total_views14[0]=478000000
+list_hours_streamed14[0]=16113
+list_hours_watched14[0]=382000000
+
+#Unify the list
+list14=list_channel_name14+list_game_name14+list_total_followers14+list_avg_viewers14+list_total_views14+list_hours_streamed14+list_hours_watched14
+
+
+#15.Channel XROHAT
+url = 'https://twitchtracker.com/xrohat/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name15= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name15.text)
+list_channel_name15 = channel_name15.text.split(".")
+
+# Scrape name of games by loop
+game_name15= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name15.text)
+list_game_name15=game_name15.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/xrohat/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers15= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers15.text)
+list_total_followers15 = total_followers15.text.split()
+
+#scrape average viewers
+avg_viewers15= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers15.text)
+list_avg_viewers15 = avg_viewers15.text.split(".")
+
+#scrap total views
+total_views15= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views15.text)
+list_total_views15 = total_views15.text.split()
+
+#scrap hours streamed
+hours_streamed15= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed15.text)
+list_hours_streamed15 = hours_streamed15.text.split()
+
+#scrap hours watched
+hours_watched15= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched15.text)
+list_hours_watched15 = hours_watched15.text.split()
+
+#Modify the original data
+list_total_followers15[0]=300000
+list_avg_viewers15[0]=3250
+list_total_views15[0]=6920000
+list_hours_streamed15[0]=2680
+list_hours_watched15[0]=8710000
+
+#Unify the list
+list15=list_channel_name15+list_game_name15+list_total_followers15+list_avg_viewers15+list_total_views15+list_hours_streamed15+list_hours_watched15
+
+
+#16.Channel TRAINWRECKSTV
+url = 'https://twitchtracker.com/trainwreckstv/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name16= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name16.text)
+list_channel_name16 = channel_name16.text.split(".")
+
+# Scrape name of games by loop
+game_name16= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name16.text)
+list_game_name16=game_name16.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/trainwreckstv/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers16= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers16.text)
+list_total_followers16 = total_followers16.text.split()
+
+#scrape average viewers
+avg_viewers16= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers16.text)
+list_avg_viewers16 = avg_viewers16.text.split(".")
+
+#scrap total views
+total_views16= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views16.text)
+list_total_views16 = total_views16.text.split()
+
+#scrap hours streamed
+hours_streamed16= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed16.text)
+list_hours_streamed16 = hours_streamed16.text.split()
+
+#scrap hours watched
+hours_watched16= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched16.text)
+list_hours_watched16 = hours_watched16.text.split()
+
+#Modify the original data
+list_total_followers16[0]=1590000
+list_avg_viewers16[0]=9207
+list_total_views16[0]=72800000
+list_hours_streamed16[0]=9284
+list_hours_watched16[0]=85500000
+
+#Unify the list
+list16=list_channel_name16+list_game_name16+list_total_followers16+list_avg_viewers16+list_total_views16+list_hours_streamed16+list_hours_watched16
+
+
+#17.Channel MIZKIF
+url = 'https://twitchtracker.com/mizkif/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name17= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name17.text)
+list_channel_name17 = channel_name17.text.split(".")
+
+# Scrape name of games by loop
+game_name17= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name17.text)
+list_game_name17=game_name17.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/mizkif/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers17= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers17.text)
+list_total_followers17 = total_followers17.text.split()
+
+#scrape average viewers
+avg_viewers17= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers17.text)
+list_avg_viewers17 = avg_viewers17.text.split(".")
+
+#scrap total views
+total_views17= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views17.text)
+list_total_views17 = total_views17.text.split()
+
+#scrap hours streamed
+hours_streamed17= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed17.text)
+list_hours_streamed17 = hours_streamed17.text.split()
+
+#scrap hours watched
+hours_watched17= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched17.text)
+list_hours_watched17 = hours_watched17.text.split()
+
+#Modify the original data
+list_total_followers17[0]=1600000
+list_avg_viewers17[0]=11441
+list_total_views17[0]=76100000
+list_hours_streamed17[0]=6809
+list_hours_watched17[0]=77900000
+
+#Unify the list
+list17=list_channel_name17+list_game_name17+list_total_followers17+list_avg_viewers17+list_total_views17+list_hours_streamed17+list_hours_watched17
+
+
+#18.Channel ADINROSS
+url = 'https://twitchtracker.com/adinross/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name18= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name18.text)
+list_channel_name18 = channel_name18.text.split(".")
+
+# Scrape name of games by loop
+game_name18= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name18.text)
+list_game_name18=game_name18.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/adinross/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers18= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers18.text)
+list_total_followers18 = total_followers18.text.split()
+
+#scrape average viewers
+avg_viewers18= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers18.text)
+list_avg_viewers18 = avg_viewers18.text.split(".")
+
+#scrap total views
+total_views18= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views18.text)
+list_total_views18 = total_views18.text.split()
+
+#scrap hours streamed
+hours_streamed18= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed18.text)
+list_hours_streamed18 = hours_streamed18.text.split()
+
+#scrap hours watched
+hours_watched18= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched18.text)
+list_hours_watched18 = hours_watched18.text.split()
+
+#Modify the original data
+list_total_followers18[0]=5070000
+list_avg_viewers18[0]=15779
+list_total_views18[0]=38400000
+list_hours_streamed18[0]=3403
+list_hours_watched18[0]=53700000
+
+#Unify the list
+list18=list_channel_name18+list_game_name18+list_total_followers18+list_avg_viewers18+list_total_views18+list_hours_streamed18+list_hours_watched18
+
+
+#19.Channel	ADMIRALBAHROO
+url = 'https://twitchtracker.com/admiralbahroo/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name19= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name19.text)
+list_channel_name19 = channel_name19.text.split(".")
+
+# Scrape name of games by loop
+game_name19= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name19.text)
+list_game_name19=game_name19.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/admiralbahroo/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers19= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers19.text)
+list_total_followers19 = total_followers19.text.split()
+
+#scrape average viewers
+avg_viewers19= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers19.text)
+list_avg_viewers19 = avg_viewers19.text.split(".")
+
+#scrap total views
+total_views19= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views19.text)
+list_total_views19 = total_views19.text.split()
+
+#scrap hours streamed
+hours_streamed19= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed19.text)
+list_hours_streamed19 = hours_streamed19.text.split()
+
+#scrap hours watched
+hours_watched19= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched19.text)
+list_hours_watched19 = hours_watched19.text.split()
+
+#Modify the original data
+list_total_followers19[0]=850000
+list_avg_viewers19[0]=7331
+list_total_views19[0]=78300000
+list_hours_streamed19[0]=12778
+list_hours_watched19[0]=93700000
+
+#Unify the list
+list19=list_channel_name19+list_game_name19+list_total_followers19+list_avg_viewers19+list_total_views19+list_hours_streamed19+list_hours_watched19
+
+
+#20.Channel PHILZA
+url = 'https://twitchtracker.com/philza/games'
+driver.get(url)
+driver.maximize_window()
+
+#name of channel
+channel_name20= driver.find_element(By.XPATH,'//*[@id="app-title"]')
+print(channel_name20.text)
+list_channel_name20 = channel_name20.text.split(".")
+
+# Scrape name of games by loop
+game_name20= driver.find_element(By.XPATH,'//*[@id="games"]/tbody/tr[1]/td[2]/a')
+print(game_name20.text)
+list_game_name20=game_name20.text.split(".")
+
+#scrap total viewers
+url = 'https://twitchtracker.com/philza/statistics'
+driver.get(url)
+driver.maximize_window()
+
+total_followers20= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[1]/div/div[2]/span')
+print(total_followers20.text)
+list_total_followers20 = total_followers20.text.split()
+
+#scrape average viewers
+avg_viewers20= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[5]/div/div[2]/span')
+print(avg_viewers20.text)
+list_avg_viewers20 = avg_viewers20.text.split(".")
+
+#scrap total views
+total_views20= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[2]/div/div[2]/span')
+print(total_views20.text)
+list_total_views20 = total_views20.text.split()
+
+#scrap hours streamed
+hours_streamed20= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[3]/div/div[2]/span')
+print(hours_streamed20.text)
+list_hours_streamed20 = hours_streamed20.text.split()
+
+#scrap hours watched
+hours_watched20= driver.find_element(By.XPATH,'/html/body/div[3]/div[4]/section[1]/div/div[1]/div[4]/div/div[2]/span')
+print(hours_watched20.text)
+list_hours_watched20 = hours_watched20.text.split()
+
+#Modify the original data
+list_total_followers20[0]=3640000
+list_avg_viewers20[0]=9646
+list_total_views20[0]=44600000
+list_hours_streamed20[0]=3321
+list_hours_watched20[0]=32000000
+
+#Unify the list
+list20=list_channel_name20+list_game_name20+list_total_followers20+list_avg_viewers20+list_total_views20+list_hours_streamed20+list_hours_watched20
+
+
+#Turn all lists into vectors
+array1 = np.array(list1)
+array2 = np.array(list2)
+array3 = np.array(list3)
+array4 = np.array(list4)
+array5 = np.array(list5)
+array6 = np.array(list6)
+array7 = np.array(list7)
+array8 = np.array(list8)
+array9 = np.array(list9)
+array10 = np.array(list10)
+array11 = np.array(list11)
+array12 = np.array(list12)
+array13 = np.array(list13)
+array14 = np.array(list14)
+array15 = np.array(list15)
+array16 = np.array(list16)
+array17 = np.array(list17)
+array18 = np.array(list18)
+array19 = np.array(list19)
+array20 = np.array(list20)
+
+
+#Combine all vectors into one data frame
+data = np.vstack((array1,array2,array3,array4,array5,array6,array7,array8,array9,array10,array11,array12,array13,array14,array15,array16,array17,array18,array19,array20))
+
+
+#scrap subscibers of top 20
+url = 'https://twitchtracker.com/subscribers'
+driver.get(url)
+driver.maximize_window()
+subsciber_elem = driver.find_elements_by_xpath('/html/body/div[3]/div[3]/section[2]/table/tbody/tr/td[5]/span')
+subsciber_list = list()
+for n in subsciber_elem:
+    subsciber_list.append(n.text)
+
+#Modify the original data
+subsciber_list[0: 20] = [85802,66216,53923,49894,45267,44558,43996,40350,38213,34463,31395,30777,30085,29589,28595,28324,24294,22498,22023,21947]
+del subsciber_list[-1]
+
+
+#Turn lists into vector
+array21 = np.array(subsciber_list)
+
+#Convert to column vector
+array = array21.reshape(-1, 1)
+
+#Merge data frame
+data2 = np.hstack((data,array))
+
+#join data into csv file
+df =  pd.DataFrame(data2,columns=['Channel name','Game name','Total followers','Average viewers','Total views','Hours streamed','Hours watched','Subscibers'])
+
+#Export CSV file
+df.to_csv(r'C:\Users\Yi Heng\Desktop\video_game_streaming.csv',index=False)
+
+# Scrape numerical data of each of recent top 50 popular channels. The statistics provided by the website will be updated everyday. Finally we scrape it on 12/1/2021
+## Python
+@author: Chase(Cao)
+
+url = 'https://twitchtracker.com/channels/viewership/english/personality'
+driver.get(url)
+driver.maximize_window()
+driver.implicitly_wait(5)
+# Scrape time_streamed by loop
+time_streamed=[]
+loop = range(1, 13)
+for x in loop:
+    time_streamed.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[5]/span'%x).text)
+
+loop = range(15, 27)
+for x in loop:
+    time_streamed.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[5]/span'%x).text)
+
+loop = range(29, 41)
+for x in loop:
+    time_streamed.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[5]/span'%x).text)
+
+loop = range(43, 53)
+for x in loop:
+    time_streamed.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[5]/span'%x).text)
+
+# Scrape avg_viewers by loop
+avg_viewers=[]
+loop = range(1, 13)
+for x in loop:
+    avg_viewers.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[4]/span'%x).text)
+
+loop = range(15, 27)
+for x in loop:
+    avg_viewers.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[4]/span'%x).text)
+
+loop = range(29, 41)
+for x in loop:
+    avg_viewers.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[4]/span'%x).text)
+
+loop = range(43, 53)
+for x in loop:
+    avg_viewers.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[4]/span'%x).text)
+
+# Scrape hour_watched by loop
+hour_watched=[]
+loop = range(1, 13)
+for x in loop:
+    hour_watched.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[7]/span'%x).text)
+
+loop = range(15, 27)
+for x in loop:
+    hour_watched.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[7]/span'%x).text)
+
+loop = range(29, 41)
+for x in loop:
+    hour_watched.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[7]/span'%x).text)
+
+loop = range(43, 53)
+for x in loop:
+    hour_watched.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[7]/span'%x).text)
+
+# Scrape follower_gain by loop
+follower_gain=[]
+loop = range(1, 13)
+for x in loop:
+    follower_gain.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[9]/span'%x).text)
+
+loop = range(15, 27)
+for x in loop:
+    follower_gain.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[9]/span'%x).text)
+
+loop = range(29, 41)
+for x in loop:
+    follower_gain.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[9]/span'%x).text)
+
+loop = range(43, 53)
+for x in loop:
+    follower_gain.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[9]/span'%x).text)
+
+# Scrape total_follower by loop
+total_follower=[]
+loop = range(1, 13)
+for x in loop:
+    total_follower.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[10]/span'%x).text)
+
+loop = range(15, 27)
+for x in loop:
+    total_follower.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[10]/span'%x).text)
+
+loop = range(29, 41)
+for x in loop:
+    total_follower.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[10]/span'%x).text)
+
+loop = range(43, 53)
+for x in loop:
+    total_follower.append(driver.find_element(By.XPATH,'/html/body/div[3]/div[2]/div[2]/table/tbody/tr[%d]/td[10]/span'%x).text)
+
+list=list(zip(time_streamed, avg_viewers, hour_watched, follower_gain, total_follower))  
+raw_numerical_data= pd.DataFrame(list,columns=['time_streamed', 'avg_viewers', 'hour_watched', 'follower_gain', 'total_follower'])
+raw_numerical_data.to_csv('D:\Documents\\raw_numerical_data.txt',index=False,sep='\t')
+
+# Transform and analyze the data of recent top 50 popular channels
+## R
+@author: Chase(Cao)
+
+#install.packages('regclass')
+library(regclass)
+## Read data
+data=read.table("D:\\Documents\\raw_numerical_data.txt",header=TRUE)
+## Data transformation 
+### Transform k to 1000 and M to 1000000
+data3k<-as.numeric(sub("K", "e3", data[,3], fixed = TRUE))
+data3m<-as.numeric(sub("M", "e6", data[,3], fixed = TRUE))
+data3k[is.na(data3k)] <- 0
+data3m[is.na(data3m)] <- 0
+data[,3]<-data3k+data3m
+
+data4k<-as.numeric(sub("K", "e3", data[,4], fixed = TRUE))
+data4m<-as.numeric(sub("M", "e6", data[,4], fixed = TRUE))
+data4k[is.na(data4k)] <- 0
+data4m[is.na(data4m)] <- 0
+data[,4]<-data4k+data4m
+
+data5k<-as.numeric(sub("K", "e3", data[,5], fixed = TRUE))
+data5m<-as.numeric(sub("M", "e6", data[,5], fixed = TRUE))
+data5k[is.na(data5k)] <- 0
+data5m[is.na(data5m)] <- 0
+data[,5]<-data5k+data5m
+
+### Make the data in the second column numerical data. 
+data[,2]<-as.numeric(sub(",", "", data[,2], fixed = TRUE))
+
+## transformed data
+data
+plot(data)
+
+## check correlation of data matrix
+cor(data[,1:3])
+
+## Model
+model1<-lm(total_follower~avg_viewers+hour_watched+time_streamed,data=data)
+summary(model1)
+VIF(model1)
+
+model2<-lm(follower_gain~avg_viewers+hour_watched+time_streamed,data=data)
+summary(model2)
+VIF(model2)
+
+# Scrape chatbox of top 20 channels
+## Python
+
+@author: All of us
+
+# Chaneel 1-4
+@author: Chase(Cao)
+
+## For channel 1 CRITICALROLE, it required subscription to watch. So skip it.
+
+## For channel 2 XQCOW 
+## Run the codes below 5 times with different number (from 1 to 5) to get 5 files of chatbox data at 5 different time point. 
+url1 = 'https://www.twitch.tv/videos/1217149538'
+driver.get(url1)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+XQCOW5=[]
+loop = range(10, 110) # scrape 100 chats.
+for x in loop:
+    XQCOW5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+XQCOW5_df= pd.DataFrame(XQCOW5)
+XQCOW5_df.to_csv('D:\Documents\XQCOW5_df.txt',index=False,sep='\t')
+
+## For channel 3 RANBOOLIVE
+url2 = 'https://www.twitch.tv/videos/1206589824?filter=archives&sort=time'
+driver.get(url2)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+RANBOO5=[]
+loop = range(2, 101) # scrape 100 chats.
+for x in loop:
+    RANBOO5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+RANBOO5_df= pd.DataFrame(RANBOO5)
+RANBOO5_df.to_csv('D:\Documents\RANBOO5_df.txt',index=False,sep='\t')
+
+
+## For channel 4 GAULES (Not in English. Will be removed)
+url3 = 'https://www.twitch.tv/videos/1184792471'
+driver.get(url3)
+# wait the webpage to load for a while
+driver.implicitly_wait(100)
+# Scrape text in chatbox by loop
+GAULES=[]
+loop = range(2, 101) # scrape 100 chats.
+for x in loop:
+    GAULES.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(GAULES)
+
+# Channel 5-8
+@author: Heng
+
+## For channel 5 IBAI
+url12 = 'https://www.twitch.tv/videos/1215770800'  #Just Chatting
+driver.get(url12)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+IBAI=[]
+loop = range(1,60 ) # scrape  chats.
+for x in loop:
+    IBAI.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(IBAI)
+
+IBAIO4text = [IBAI]
+
+flatListIBAIO4 = []
+for elem in IBAIO4text:
+    flatListIBAIO4.extend(elem)
+flatListIBAIO4
+
+IBAIO4chatcomb = pd.DataFrame(flatListIBAIO4)
+IBAIO4chatcomb.to_csv('C:/Users/Yi Heng/Desktop/IBAI.txt', index = False, sep = '\t')
+
+
+## For channel 6 NICKMERCS
+url13 = 'https://www.twitch.tv/nickmercs/clip/BeautifulLivelyDumplingsDuDudu-ajQgJKZXYc3-CrTk'  #Apex Legends
+driver.get(url13)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+NICKMERCS=[]
+loop = range(2,47 ) # scrape  chats.
+for x in loop:
+    NICKMERCS.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(NICKMERCS)
+
+NICKMERCStext = [NICKMERCS]
+
+flatListNICKMERCS = []
+for elem in NICKMERCStext:
+    flatListNICKMERCS.extend(elem)
+flatListNICKMERCS
+
+NICKMERCSchatcomb = pd.DataFrame(flatListNICKMERCS)
+NICKMERCSchatcomb.to_csv('C:/Users/Yi Heng/Desktop/NICKMERCS.txt', index = False, sep = '\t')
+
+
+
+## For channel 7 加藤純一です
+url14 = 'https://www.twitch.tv/videos/1213588970'  #ポケダンのインストールをする
+driver.get(url14)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+加藤純一です=[]
+loop = range(1,60 ) # scrape  chats.
+for x in loop:
+    加藤純一です.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(加藤純一です)
+
+加藤純一ですtext = [加藤純一です]
+
+flatList加藤純一です = []
+for elem in 加藤純一ですtext:
+    flatList加藤純一です.extend(elem)
+flatList加藤純一です
+
+加藤純一ですchatcomb = pd.DataFrame(flatList加藤純一です)
+加藤純一ですchatcomb.to_csv('C:/Users/Yi Heng/Desktop/加藤純一です.txt', index = False, sep = '\t')
+
+## For channel 8 HasanAbi
+#hello 11/25 on 11/26
+driver = webdriver.Firefox(executable_path=r'C:\Users\Yi Heng\Documents\geckodriver.exe')
+url14 = 'https://www.twitch.tv/videos/1213588970'  #Just Chatting
+driver.get(url14)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+HasanAbi=[]
+loop = range(1,100 ) # scrape  chats.
+for x in loop:
+    HasanAbi.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(HasanAbi)
+
+HasanAbitext = [HasanAbi]
+
+flatListHasanAbi = []
+for elem in HasanAbitext:
+    flatListHasanAbi.extend(elem)
+flatListHasanAbi
+
+HasanAbichatcomb = pd.DataFrame(flatListHasanAbi)
+HasanAbichatcomb.to_csv('C:/Users/Yi Heng/Desktop/HasanAbi.txt', index = False, sep = '\t')
+
+# Channel 9-12
+@author: Noreen
+## For channel 10 MONTANABLACK88
+
+montana_url = driver.get('https://www.twitch.tv/videos/1215758353')
+driver.implicitly_wait(30)
+driver.maximize_window() #wait 30sec for page to fully load
+
+#click start watching button
+driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/main/div[2]/div[3]/div/div/div[2]/div/div[2]/div/div/div/div/div[5]/div/div[3]/button/div/div').click()
+driver.implicitly_wait(30)
+ # Scrape text in chatbox by loop
+montanablack88=[]
+loop = range(56,100) # scrape  chats.
+for x in loop:
+    montanablack88.append(driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(montanablack88)
+
+montana2=[]
+loop = range(128,160) # scrape chats from different hours.
+for x in loop:
+    montana2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(montana2)
+
+montana3=[]
+loop = range(87,105) # scrape chats from different hours.
+for x in loop:
+    montana3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span[1]'%x).text)
+print(montana3)
+
+montana4=[]
+loop = range(13, 37) # scrape chats from different hours.
+for x in loop:
+    montana4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(montana4)
+
+
+mon_text = [montanablack88, montana2, montana3, montana4]
+
+flatList_mon = []
+for elem in mon_text:
+    flatList_mon.extend(elem)
+flatList_mon
+
+a_chatcomb = pd.DataFrame(flatList_mon)
+a_chatcomb.to_csv('montana.txt', index = False, sep = '\t')
+
+
+## For Channel 9 AURONPLAY
+
+auronplay_url = 'https://www.twitch.tv/videos/1215601745'  
+driver.get(auronplay_url)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+auronplay=[]
+loop = range(3,30) # scrape  chats.
+for x in loop:
+    auronplay.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(auronplay)
+
+auronplay2=[]
+loop = range(34, 77) # scrape chats from different hours.
+for x in loop:
+    auronplay2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(auronplay2)
+
+auronplay3=[]
+loop = range(18, 57) # scrape chats from different hours.
+for x in loop:
+    auronplay3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(auronplay3)
+
+auronplay4=[]
+loop = range(9, 40) # scrape chats from different hours.
+for x in loop:
+    auronplay4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(auronplay4)
+
+a_text = [auronplay, auronplay2, auronplay3, auronplay4]
+
+flatLista = []
+for elem in a_text:
+    flatLista.extend(elem)
+flatLista
+
+a_chatcomb = pd.DataFrame(flatLista)
+
+a_chatcomb.to_csv('auronplay.txt', index = False, sep = '\t')
+
+## For channel 11 CASTRO_1021
+
+castro_url = 'https://www.twitch.tv/videos/1215738441'  
+driver.get(castro_url)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+castro=[]
+loop = range(21,100) # scrape  chats.
+for x in loop:
+    castro.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(castro)
+
+castro2=[]
+loop = range(21, 77) # scrape chats from different hours.
+for x in loop:
+    castro2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(castro2)
+
+castro3=[]
+loop = range(16, 80) # scrape chats from different hours.
+for x in loop:
+    castro3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(castro3)
+
+castro4=[]
+loop = range(72,150) # scrape chats from different hours.
+for x in loop:
+    castro4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(castro4)
+
+cas_text = [castro4, castro2, castro3, castro4]
+
+flatList_castro = []
+for elem in cas_text:
+    flatList_castro.extend(elem)
+flatList_castro
+
+c_chatcomb = pd.DataFrame(flatList_castro)
+
+c_chatcomb.to_csv('castro_1021.txt', index = False, sep = '\t')
+
+
+## For channel 12 CASIMITO
+
+casimito_url = 'https://www.twitch.tv/videos/1215228372'  
+driver.get(casimito_url)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+casimito=[]
+loop = range(30,100) # scrape  chats.
+for x in loop:
+    casimito.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(casimito)
+
+casimito2=[]
+loop = range(51,100) # scrape chats from different hours.
+for x in loop:
+    casimito2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(casimito2)
+
+casimito3=[]
+loop = range(89,150) # scrape chats from different hours.
+for x in loop:
+    casimito3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(casimito3)
+
+casimito4=[]
+loop = range(12,80) # scrape chats from different hours.
+for x in loop:
+    casimito4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(casimito4)
+
+casimito_text = [casimito, casimito2, casimito3, casimito4]
+
+flatList_casimito = []
+for elem in casimito_text:
+    flatList_casimito.extend(elem)
+flatList_casimito
+
+casimito_chatcomb = pd.DataFrame(flatList_casimito)
+
+casimito_chatcomb.to_csv('casimito.txt', index = False, sep = '\t')
+
+
+#SCRAP CHATS FOR MIZKIF
+
+miz_url = 'https://www.twitch.tv/videos/1214890407'  
+driver.get(miz_url)
+driver.maximize_window()
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+miz=[]
+loop = range(49,100) # scrape  chats.
+for x in loop:
+    miz.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz)
+
+miz2=[]
+loop = range(16, 77) # scrape chats from different hours.
+for x in loop:
+    miz2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz2)
+
+miz3=[]
+loop = range(23,100) # scrape chats from different hours.
+for x in loop:
+    miz3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz3)
+
+miz4=[]
+loop = range(25,100) # scrape chats from different hours.
+for x in loop:
+    miz4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz4)
+
+miz5=[]
+loop = range(17, 80) # scrape chats from different hours.
+for x in loop:
+    miz5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz5)
+
+miz6=[]
+loop = range(34,100) # scrape chats from different hours.
+for x in loop:
+    miz6.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]/span'%x).text)
+print(miz6)
+
+miz_text = [miz, miz2, miz3, miz4, miz5, miz6]
+
+flatList_miz = []
+for elem in miz_text:
+    flatList_miz.extend(elem)
+flatList_miz
+
+miz_chatcomb = pd.DataFrame(flatList_miz)
+
+miz_chatcomb.to_csv('mizkif.txt', index = False, sep = '\t')
+
+# Channel 13-16
+@author: Rafae
+
+## For Channel 13 SYKKUNO
+url12 = 'https://www.twitch.tv/videos/1211448557'  #pOKEMON
+driver.get(url12)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+SYKKUNO=[]
+loop = range(39, 77) # scrape  chats.
+for x in loop:
+    SYKKUNO.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SYKKUNO)
+
+SYKKUNO2=[]
+loop = range(21, 77) # scrape chats from different hours.
+for x in loop:
+    SYKKUNO2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SYKKUNO2)
+
+SYKKUNO3=[]
+loop = range(3, 57) # scrape chats from different hours.
+for x in loop:
+    SYKKUNO3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SYKKUNO3)
+
+SYKKUNO4=[]
+loop = range(3, 57) # scrape chats from different hours.
+for x in loop:
+    SYKKUNO4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SYKKUNO4)
+
+SYKKUNO4text = [SYKKUNO, SYKKUNO2, SYKKUNO3, SYKKUNO4]
+
+flatListSYKKUNO4 = []
+for elem in SYKKUNO4text:
+    flatListSYKKUNO4.extend(elem)
+flatListSYKKUNO4
+
+SYKKUNO4chatcomb = pd.DataFrame(flatListSYKKUNO4)
+SYKKUNO4chatcomb.to_csv('SYKKUNO4chatcomb.txt', index = False, sep = '\t')
+
+
+
+
+## For channel 14 SUMMIT1G
+url13 = 'https://www.twitch.tv/summit1g'
+driver.get(url13)
+
+vdo13 = 'https://www.twitch.tv/videos/1211292509'
+driver.get(vdo13)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+#SUMMIT1G=[]
+#loop = range(13, 100) # scrape 100 chats.
+#for x in loop:
+#    SUMMIT1G.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+#print(SUMMIT1G)
+
+SUMMIT1G2=[]
+loop = range(13, 100) # scrape 100 chats.
+for x in loop:
+    SUMMIT1G2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SUMMIT1G2)
+
+SUMMIT1G3=[]
+loop = range(21, 100) # scrape 100 chats.
+for x in loop:
+    SUMMIT1G3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SUMMIT1G3)
+type(SUMMIT1G3)
+summit1gtext = [SUMMIT1G2, SUMMIT1G3]
+summit1gtext
+
+flatList = []
+for elem in summit1gtext:
+    flatList.extend(elem)
+flatList
+
+#summit1gtextcombined = SUMMIT1G2.extend(SUMMIT1G3)
+#print(summit1gtextcombined)
+s#ummit1gtextcombined.values.tolist()
+summit1gchatcomb = pd.DataFrame(flatList)
+summit1gchatcomb.to_csv('summit1gchatcomb.txt', index = False, sep = '\t')
+
+#summit1gchat = pd.DataFrame(summit1gtext)
+#summit1gchat.to_csv('summit1gchat.txt', index = False, sep = '\t')
+
+#summit1gchat1 = pd.DataFrame(SUMMIT1G2)
+#summit1gchat1.to_csv('summit1gchat1.txt', index = False, sep = '\t')
+
+SUMMIT1G4=[]
+loop = range(24, 150) # scrape 100 chats.
+for x in loop:
+    SUMMIT1G4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SUMMIT1G4)
+
+SUMMIT1G5=[]
+loop = range(7, 100) # scrape 100 chats.
+for x in loop:
+    SUMMIT1G5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SUMMIT1G5)
+
+SUMMIT1G6=[]
+loop = range(3, 100) # scrape 100 chats.
+for x in loop:
+    SUMMIT1G6.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(SUMMIT1G6)
+
+summit1gtext = [SUMMIT1G2, SUMMIT1G3, SUMMIT1G4, SUMMIT1G5, SUMMIT1G6]
+
+flatList = []
+for elem in summit1gtext:
+    flatList.extend(elem)
+flatList
+
+summit1gchatcomb = pd.DataFrame(flatList)
+summit1gchatcomb.to_csv('summit1gchatcomb.txt', index = False, sep = '\t')
+
+
+
+## For channel 15 XROHAT
+url14 = 'https://www.twitch.tv/xrohat'
+driver.get(url14)
+
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+
+xrohat=[]
+loop = range(120, 94) # scrape 100 chats.
+for x in loop:
+    xrohat.append(driver.find_element(By.XPATH,'/html/body/div[2]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/section/div/div[3]/div/div[2]/div[3]/div/div/div[%d]/div/div[2]/div/div/span[2]'%x).text)
+print(xrohat)
+
+xrohat = pd.DataFrame(xrohat)
+xrohat.to_csv('xrohat.txt', index = False, sep = '\t')
+#Since language is not english, we will avoid this channel's text
+
+
+
+
+## For channel 16 TRAINWRECKSTV
+url15 = 'https://www.twitch.tv/videos/1209676541' #18+ warning
+driver.get(url14)
+
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+
+TRAINWRECKSTV=[]
+loop = range(1, 50) # conversation mainly?.
+for x in loop:
+    TRAINWRECKSTV.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV)
+
+TRAINWRECKSTV2=[]
+loop = range(2, 33) # one game.
+for x in loop:
+    TRAINWRECKSTV2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV2)
+
+TRAINWRECKSTV3=[]
+loop = range(6, 50) # another game within same video.
+for x in loop:
+    TRAINWRECKSTV3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV3)
+
+TRAINWRECKSTV5=[]         # scrape chats from different hours.
+loop = range(69, 150) 
+for x in loop:
+    TRAINWRECKSTV5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV5)
+
+
+TRAINWRECKSTV6=[]       # scrape chats from different hours.
+loop = range(4, 150).
+for x in loop:
+    TRAINWRECKSTV6.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV6)
+
+/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[6]/div/div[2]/div/div[1]/div/span[2]/span[2]
+
+TRAINWRECKSTV7=[]
+loop = range(6, 150) # another game from same video.
+for x in loop:
+    TRAINWRECKSTV7.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(TRAINWRECKSTV7)
+
+
+trainWRECKStvcomb = [TRAINWRECKSTV, TRAINWRECKSTV2, TRAINWRECKSTV3, TRAINWRECKSTV5, TRAINWRECKSTV6, TRAINWRECKSTV7]
+
+flatListRECK = []
+for elem in trainWRECKStvcomb:
+    flatListRECK.extend(elem)
+flatListRECK
+
+trainWRECKStvcomb = pd.DataFrame(flatListRECK)
+trainWRECKStvcomb.to_csv('trainWRECKStvcomb.txt', index = False, sep = '\t')
+
+
+driver.quit()
+
+# For channel 19-20
+@author: Rafae
+
+## For channel 19 ADMIRALBAHROO 
+url19 = 'https://www.twitch.tv/videos/1215697012'  
+driver.get(url19)
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+# Scrape text in chatbox by loop
+ADMIRALBAHROO1=[]
+loop = range(30, 77) # scrape  chats.                   
+for x in loop:
+    ADMIRALBAHROO1.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO1)
+
+ADMIRALBAHROO2=[]
+loop = range(31, 77) # scrape chats from different time.
+for x in loop:
+    ADMIRALBAHROO2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO2)
+
+ADMIRALBAHROO3=[]
+loop = range(1, 57) # scrape chats from different time.
+for x in loop:
+    ADMIRALBAHROO3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO3)
+
+ADMIRALBAHROO4=[]
+loop = range(70, 170) # scrape chats from different hours.
+for x in loop:
+    ADMIRALBAHROO4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO4)
+
+ADMIRALBAHROO5=[]
+loop = range(3, 70) # scrape chats from different time.
+for x in loop:
+    ADMIRALBAHROO5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO5)
+
+ADMIRALBAHROO6=[]
+loop = range(2, 60) # scrape chats from different hours.
+for x in loop:
+    ADMIRALBAHROO6.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(ADMIRALBAHROO6)
+
+
+ADMIRALBAHROOtext = [ADMIRALBAHROO1, ADMIRALBAHROO2, ADMIRALBAHROO3, ADMIRALBAHROO4, ADMIRALBAHROO5, ADMIRALBAHROO6]
+
+flatListADMIRALBAHROO = []
+for elem in ADMIRALBAHROOtext:
+    flatListADMIRALBAHROO.extend(elem)
+flatListADMIRALBAHROO
+
+ADMIRALBAHROOchatcomb = pd.DataFrame(flatListADMIRALBAHROO)
+ADMIRALBAHROOchatcomb.to_csv('ADMIRALBAHROOchatcomb.txt', index = False, sep = '\t')
+ADMIRALBAHROOchatcomb.to_csv('ADMIRALBAHROOchatcomb.csv', index = False, sep = '\t')
+
+
+
+
+## For channel 20 philza 
+url20 = 'https://www.twitch.tv/videos/1214690145'  #18+ warning
+driver.get(url20)
+
+# wait the webpage to load for a while
+driver.implicitly_wait(60)
+
+philza1=[]
+loop = range(43, 100) # scrape  chats - 16 minutes.
+for x in loop:
+    philza1.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(philza1)
+
+philza2=[]
+loop = range(3, 70) # scrape from 25 minutes. 
+for x in loop:
+    philza2.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(philza2)
+
+philza3=[]
+loop = range(2, 50) # scrape chats from different hour.
+for x in loop:
+    philza3.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(philza3)
+
+philza4=[]
+loop = range(7, 70) # scrape chats from different hour.
+for x in loop:
+    philza4.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(philza4)
+
+philza5=[]
+loop = range(3, 50) # scrape chats.
+for x in loop:
+    philza5.append(driver.find_element(By.XPATH,'/html/body/div[1]/div/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div/div/div[2]/div/div/ul/li[%d]/div/div[2]/div/div[1]/div/span[2]'%x).text)
+print(philza5)
+
+philzatext = [philza1, philza2, philza3, philza4, philza5]
+
+flatListphilza = []
+for elem in philzatext:
+    flatListphilza.extend(elem)
+flatListphilza
+
+philzachatcomb = pd.DataFrame(flatListphilza)
+philzachatcomb.to_csv('philzachatcomb.txt', index = False, sep = '\t')
+philzachatcomb.to_csv('philzachatcomb.csv', index = False, sep = '\t')
+
+# Combine all chat into one DataFrame
+## Python
+
+@author: Chase(Cao)
+XQCOW1 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\XQCOW1_df.txt', sep='\t')
+XQCOW2 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\XQCOW2_df.txt', sep='\t')
+XQCOW3 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\XQCOW3_df.txt', sep='\t')
+XQCOW4 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\XQCOW4_df.txt', sep='\t')
+XQCOW5 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\XQCOW5_df.txt', sep='\t')
+RANBOO1 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\RANBOO1_df.txt', sep='\t')
+RANBOO2 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\RANBOO2_df.txt', sep='\t')
+RANBOO3 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\RANBOO3_df.txt', sep='\t')
+RANBOO4 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\RANBOO4_df.txt', sep='\t')
+RANBOO5 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\The_2nd_and_3rd_channels_raw_chat_data\\RANBOO5_df.txt', sep='\t')
+ADMIRALBAHROO = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\ADMIRALBAHROOchatcomb.txt', sep='\t')
+castro_1021 = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\castro_1021.txt', sep='\t')
+mizkif = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\mizkif.txt', sep='\t')
+montana = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\montana.txt', sep='\t')
+NICKMERCS = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\NICKMERCS.txt', sep='\t')
+philzachatcomb = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\philzachatcomb.txt', sep='\t')
+summit1gchatcomb = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\summit1gchatcomb.txt', sep='\t')
+SYKKUNO4chatcomb = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\SYKKUNO4chatcomb.txt', sep='\t')
+trainWRECKStvcomb = pd.read_table('D:\Documents\\GitHub\\Game-live-streaming-project\\raw_chat_box_data_for_top_20\\trainWRECKStvcomb.txt', sep='\t')
+
+
+chatbox=pd.concat([XQCOW1,XQCOW2,XQCOW3,XQCOW4,XQCOW5,RANBOO1,RANBOO2,RANBOO3,RANBOO4,RANBOO5,ADMIRALBAHROO,castro_1021,mizkif,montana,NICKMERCS,philzachatcomb,summit1gchatcomb,SYKKUNO4chatcomb,trainWRECKStvcomb],ignore_index=True)
+print(chatbox)
+chatbox_df= pd.DataFrame(chatbox)
+chatbox_df.to_csv('D:\Documents\\final_chatbox_df.txt',index=False,sep='\t')
+
+# Sentiment analysis
+@author: Rafae
+
+#IN R
+library(tidyverse)
+library(tidytext)
+library(SnowballC)
+
+wd = "C:\\Users\\MRS ELECTRONIC\\Documents\\GitHub\\Game-live-streaming-project"
+setwd(wd)
+
+text_data = read.delim("final_chatbox_df.txt")
+summary(text_data)
+
+chattext = select(text_data, X0)
+tidy_dataset = unnest_tokens(chattext, word, X0)
+
+#Removing stop words
+data("stop_words")
+
+tidy_dataset2 = anti_join(tidy_dataset, stop_words)
+
+# Remove the numerical values from the column 
+patterndigits = '\\b[0-9]+\\b'
+# Use regex
+tidy_dataset2$word = str_remove_all(tidy_dataset2$word, patterndigits)
+
+
+# Replace/remove all T-Mobile and Sprint new lines, tabs, and blank spaces with a value of nothing
+# and then filter out or remove those values
+tidy_dataset2$word = str_replace_all(tidy_dataset2$word, '[:space:]', '')
+tidy_dataset3 = filter(tidy_dataset2,!(word == ''))
+
+#Removing frequent but unnecessary. However, we were cautious to not remove any word that
+#we don't understand. The reason is sometimes viewers might have used shoetened
+#language that is meaningful. We didn't want to lose them.
+list_remove = c("didnt","bahroo", "admiralbahroo", "summit", "miz", "hasan", "  ", "https")
+tidy_dataset3 = filter(tidy_dataset3, !(word %in% list_remove))
+
+#Stemming
+stemmed_data = wordStem(tidy_dataset3$word, language="en")
+
+tidy_dataset4 = mutate_at(tidy_dataset3, "word", funs(wordStem((.), language="en")))
+
+
+#Follow-Up Analysis
+#Top10
+counts5 = count(tidy_dataset4, word)
+
+arrange(counts5, desc(n)) %>%
+  ungroup %>%
+  slice(1:10)
+
+##IN PYTHON
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+import regex
+
+import nltk
+from nltk import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import LancasterStemmer, WordNetLemmatizer, PorterStemmer
+
+os.chdir(r'C:\Users\MRS ELECTRONIC\Documents\GitHub\Game-live-streaming-project')
+
+chat_data = pd.read_fwf('final_chatbox_df.txt')
+
+chat_data.rename(columns={'0': 'chattext'}, inplace=True)
+
+#Remove stop word
+stop = stopwords.words('english')
+
+chat_data['chattext'] = chat_data['chattext'].apply(lambda x: " ".join(x for x in x.split() if x not in stop))
+
+#Remove numerical values
+patterndigits = '\\b[0-9]+\\b'
+chat_data['chattext'] = chat_data['chattext'].str.replace(patterndigits,'')
+
+#Remove punctuation 
+patternpunc = '[^\w\s]'
+chat_data['chattext'] = chat_data['chattext'].str.replace(patternpunc,'')
+
+#Convert to lowercase and remove 2 company names
+chat_data['chattext'] = chat_data['chattext'].apply(lambda x: " ".join(x.lower() for x in x.split()))
+
+#Removing unneccessary words coming frequently
+list_remove = ["didnt","bahroo", "admiralbahroo", "summit", "miz", "hasan", "ðÿ", "https"]
+
+chat_data['chattext'] = chat_data['chattext'].apply(lambda x: " ".join(x for x in x.split() if x not in list_remove))
+
+# Stem the data using PorterStemmer()
+
+porstem = PorterStemmer()
+
+chat_data['chattext'] = chat_data['chattext'].apply(lambda x: " ".join([porstem.stem(word) for word in x.split()]))
+
+
+# Creating a document-term matrix
+#================================
+from sklearn.feature_extraction.text import CountVectorizer
+vectorizer = CountVectorizer()
+
+tokens_data = pd.DataFrame(vectorizer.fit_transform(chat_data['chattext']).toarray(), columns=vectorizer.get_feature_names())
+
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import NMF
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, plot_confusion_matrix
+
+
+vectorizer = CountVectorizer(max_df=0.8, min_df=4, stop_words='english')
+
+doc_term_matrix = vectorizer.fit_transform(chat_data['chattext'].values.astype('U'))
+
+doc_term_matrix.shape
+# Performing LDA
+LDA = LatentDirichletAllocation(n_components=4, random_state=35)
+LDA.fit(doc_term_matrix)
+
+first_topic = LDA.components_[0]
+top_topic_words = first_topic.argsort()[-10:]
+
+for i,topic in enumerate(LDA.components_):
+    print(f'Top 10 words for topic #{i}:')
+    print([vectorizer.get_feature_names()[i] for i in topic.argsort()[-10:]])
+    print('\n')
+
+
+topic_values = LDA.transform(doc_term_matrix)
+topic_values.shape
+chat_data['topic'] = topic_values.argmax(axis=1)
+
+##Proportion of topics in chat
+print('Proportion of topic 0' + str(len(chat_data[chat_data['topic'] == 0]) / len(chat_data['topic'])))
+print('Proportion of topic 1' + str(len(chat_data[chat_data['topic'] == 1]) / len(chat_data['topic'])))
+print('Proportion of topic 2' + str(len(chat_data[chat_data['topic'] == 2]) / len(chat_data['topic'])))
+print('Proportion of topic 3' + str(len(chat_data[chat_data['topic'] == 3]) / len(chat_data['topic'])))
+
+
+# Perform Non-Negative Matrix Factorization (NMF)
+
+tfidf_vect = TfidfVectorizer(max_df=0.8, min_df=4, stop_words='english')
+
+doc_term_matrix2 = tfidf_vect.fit_transform(chat_data['chattext'].values.astype('U'))
+
+nmf = NMF(n_components=4, random_state=42)
+
+nmf.fit(doc_term_matrix2)
+
+
+for i, topic in enumerate(nmf.components_):
+    print(f'Top 10 words for topic #{i}:')
+    print([vectorizer.get_feature_names()[i] for i in topic.argsort()[-10:]])
+    print('\n')
+
+topic_values2 = nmf.transform(doc_term_matrix2)
+chat_data['topic2'] = topic_values2.argmax(axis=1)
+
+##Proportion of topics in chat
+print('Proportion of topic 0' + str(len(chat_data[chat_data['topic2'] == 0]) / len(chat_data['topic2'])))
+print('Proportion of topic 1' + str(len(chat_data[chat_data['topic2'] == 1]) / len(chat_data['topic2'])))
+print('Proportion of topic 2' + str(len(chat_data[chat_data['topic2'] == 2]) / len(chat_data['topic2'])))
+print('Proportion of topic 3' + str(len(chat_data[chat_data['topic2'] == 3]) / len(chat_data['topic2'])))
+
+
+
+##IN R
+
+library(wordcloud)
+library(udpipe)
+library(lattice)
+
+# in the NRC dictionary
+#===================================
+
+## Positive - Negative with nrc dictionary
+
+nrc_posneg = get_sentiments('nrc') %>%
+  filter(sentiment == 'positive' | 
+           sentiment == 'negative')
+
+nrow(nrc_posneg)
+
+newjoin2 = inner_join(tidy_dataset4, nrc_posneg)
+counts8 = count(newjoin2, word, sentiment)
+spread3 = spread(counts8, sentiment, n, fill = 0)
+content_data2 = mutate(spread3, contentment = positive - negative, linenumber = row_number())
+tweet_posneg = arrange(content_data2, desc(contentment))
+
+(tweet_posneg2 = tweet_posneg %>%
+    slice(1:10,183:192))
+
+ggplot(tweet_posneg2, aes(x=linenumber, y=contentment, fill=word)) +
+  coord_flip() +
+  theme_light(base_size = 15) +
+  labs(
+    x='Index Value',
+    y='Contentment',
+    title='Positive vs Negative - Sentiment Ananlysis'
+  ) +
+  theme(
+    legend.position = 'bottom',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10)
+  ) +
+  geom_col()
+
+
+
+## We are taking Surprise - Disgust to see whether people were surprised
+
+nrc_surdis = get_sentiments('nrc') %>%
+  filter(sentiment == 'surprise' | 
+           sentiment == 'disgust')
+
+nrow(nrc_surdis)
+
+newjoin2 = inner_join(tidy_dataset4, nrc_surdis)
+counts8 = count(newjoin2, word, sentiment)
+spread4 = spread(counts8, sentiment, n, fill = 0)
+content_data3 = mutate(spread4, contentment = surprise - disgust, linenumber = row_number())
+emo_surdis = arrange(content_data3, desc(contentment))
+emo_surdis
+(tweet_surdis2 = emo_surdis %>%
+    slice(1:5,58:62))
+
+ggplot(tweet_surdis2, aes(x=linenumber, y=contentment, fill=word)) +
+  coord_flip() +
+  theme_light(base_size = 20) +
+  labs(
+    x='Index Value',
+    y='Contentment',
+    title='Surprise vs Disgust - Sentiment Ananlysis'
+  ) +
+  theme(
+    legend.position = 'bottom',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10)
+  ) +
+  geom_col()
+
+
+## We are taking Trust - Fear to see whether people relied on player's performance
+
+nrc_trufea = get_sentiments('nrc') %>%
+  filter(sentiment == 'trust' | 
+           sentiment == 'fear')
+
+nrow(nrc_trufea)
+
+newjoin2 = inner_join(tidy_dataset4, nrc_trufea)
+counts8 = count(newjoin2, word, sentiment)
+spread4 = spread(counts8, sentiment, n, fill = 0)
+content_data3 = mutate(spread4, contentment = trust - fear, linenumber = row_number())
+emo_trufea = arrange(content_data3, desc(contentment))
+emo_trufea
+(emo_trufea = emo_trufea %>%
+    slice(1:5,103:107))
+
+ggplot(emo_trufea, aes(x=linenumber, y=contentment, fill=word)) +
+  coord_flip() +
+  theme_light(base_size = 20) +
+  labs(
+    x='Index Value',
+    y='Contentment',
+    title='Trust vs Fear - Sentiment Ananlysis'
+  ) +
+  theme(
+    legend.position = 'bottom',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10)
+  ) +
+  geom_col()
+
+
+
+### POST (Parts of Speech Tagging)
+library(Rcpp)
+
+ud_model = udpipe_download_model(language = "english")
+tidy_post1 = tidy_dataset4 %>% 
+  select(word)
+
+tidy_post1 = tidy_dataset4 %>%
+  select(word)
+
+ud_model = udpipe_load_model(ud_model$file_model)
+
+
+tagging_data = as.data.frame(udpipe_annotate(ud_model, x = tidy_post1$word))
+
+# Most Occuring NOUNS
+#======================
+noun_stats = subset(tagging_data, upos %in% c("NOUN"))
+
+noun_stats2 = txt_freq(noun_stats$token)
+
+noun_stats2$key = factor(noun_stats2$key, levels = rev(noun_stats2$key))
+
+noun_stats2 %>%
+  slice(1:15) %>%
+  ggplot(aes(x=key, y=as.factor(freq), fill=freq)) +
+  coord_flip() +
+  theme_light(base_size = 15) +
+  labs(
+    x='Frequency',
+    y='',
+    title='Noun Occurrences'
+  ) +
+  theme(
+    legend.position = 'none',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 13)
+  ) +
+  scale_fill_gradient(low="orange", high="orange3") +
+  geom_col()
+
+#===========================
+# Most Occuring ADJECTIVES
+#===========================
+adjstats = subset(tagging_data, upos %in% c("ADJ"))
+
+adjstats2 = txt_freq(adjstats$token)
+
+adjstats2$key = factor(adjstats2$key, levels = rev(adjstats2$key))
+
+adjstats2 %>%
+  slice(1:15) %>%
+  ggplot(aes(x=key, y=as.factor(freq), fill=freq)) +
+  coord_flip() +
+  theme_light(base_size = 15) +
+  labs(
+    x='Frequency',
+    y='',
+    title='Adjective Occurrences'
+  ) +
+  theme(
+    legend.position = 'none',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 13)
+  ) +
+  scale_fill_gradient(low="chartreuse", high="chartreuse3") +
+  geom_col()
+
+
+#======================
+# Most Occuring VERBS
+#======================
+verbstats = subset(tagging_data, upos %in% c("VERB"))
+
+verbstats2 = txt_freq(verbstats$token)
+
+verbstats2$key = factor(verbstats2$key, levels = rev(verbstats2$key))
+
+verbstats2 %>%
+  slice(1:15) %>%
+  ggplot(aes(x=key, y=as.factor(freq), fill=freq)) +
+  coord_flip() +
+  theme_light(base_size = 15) +
+  labs(
+    x='Frequency',
+    y='',
+    title='Verb Occurrences'
+  ) +
+  theme(
+    legend.position = 'none',
+    panel.grid = element_blank(),
+    axis.title = element_text(size = 10),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 13)
+  ) +
+  scale_fill_gradient(low="tan", high="tan3") +
+  geom_col()
+
+####====================
+##Named-Entity Recognition
+
+library(stringr)
+library(NLP)
+library(openNLP)
+
+sent_token_annotator = Maxent_Sent_Token_Annotator()
+word_token_annotator = Maxent_Word_Token_Annotator()
+pos_tag_annotator = Maxent_POS_Tag_Annotator() 
+
+tidy_dataset5 = unlist(tidy_dataset4)
+tidy_dataset5 = paste(tidy_dataset5)
+tidy_dataset5 = as.String(tidy_dataset5)
+
+anno1 = annotate(tidy_dataset5, list(sent_token_annotator, 
+                                 word_token_annotator))
+
+anno2 = annotate(tidy_dataset5, pos_tag_annotator, anno1)
+
+(annotate(tidy_dataset5, Maxent_POS_Tag_Annotator(probs = TRUE), anno2))
+
+anno2wrd = subset(anno2, type == "word")
+
+tags = sapply(anno2wrd$features, `[[`, "POS")
+
+
+sprintf("%s/%s", tidy_dataset5[anno2wrd], tags)
+
+
+
+anno3 = annotate(tidy_dataset5, list(sent_token_annotator, 
+                                 word_token_annotator))
+
+
+# Named-entity Person
+#=========================
+entity_annotator = Maxent_Entity_Annotator(kind='person')
+entity_annotator
+
+anno5 = entity_annotator(tidy_dataset5, anno3)
+
+tidy_dataset5[anno5]
+
+
+# Named-entity locations
+#=========================
+loc_annotator = Maxent_Entity_Annotator(kind='location')
+
+anno6 = loc_annotator(tidy_dataset5, anno3)
+
+# Retrieve text
+tidy_dataset5[anno6]
+
+
+#=============================
+# Named-entity organizations
+#=============================
+org_annotator = Maxent_Entity_Annotator(kind='organization')
+
+anno7 = org_annotator(tidy_dataset5, anno3)
+anno7
+
+# Retrieve text
+tidy_dataset5[anno7]
